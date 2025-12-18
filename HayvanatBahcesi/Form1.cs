@@ -1,5 +1,6 @@
 using Npgsql;
 using System.Data;
+using System.Windows.Forms;
 
 namespace HayvanatBahcesi
 {
@@ -19,33 +20,33 @@ namespace HayvanatBahcesi
                     baglanti.Open();
 
                     string sql = @"
-                SELECT 
-                    h.""HayvanId"",
-                    t.""TurAdi"" AS ""Tür"",
-                    h.""Yas"" AS ""Yaþ"",
-                    h.""BeslenmeSaati"" AS ""Beslenme Saati"",
-                    
-                   
-                    k.""KafesId"" AS ""Kafes No"",
-                    (k.""Buyukluk"" || ' m2') AS ""Kafes Boyutu"",
-                    (k.""MevcutHayvanSayisi"" || ' / ' || k.""Kapasite"") AS ""Doluluk"",
-                    
-                   
-                    o.""OrtamTuru"" AS ""Ortam"",
-                    (o.""Sicaklik"" || ' °C') AS ""Sýcaklýk""
+SELECT 
+    h.""HayvanId"",
+    
+   
+    h.""TurId"",          
+    h.""KafesId"",        
+    h.""OrtamId"",        
+   
 
-                FROM ""Hayvan"" h
-                
-               
-                INNER JOIN ""Tur"" t ON h.""TurId"" = t.""TurId""
-                
-                
-               INNER JOIN ""Kafes"" k ON h.""KafesId"" = k.""KafesId""
-                
-                
-                INNER JOIN ""Ortam"" o ON h.""OrtamId"" = o.""OrtamId""
-                
-                ORDER BY h.""HayvanId"" ASC";
+    t.""TurAdi"" AS ""Tür"",
+    h.""Yas"" AS ""Yaþ"",
+    h.""BeslenmeSaati"" AS ""Beslenme Saati"",
+    
+    k.""KafesId"" AS ""Kafes No"", 
+    (k.""Buyukluk"" || ' m2') AS ""Kafes Boyutu"",
+    (k.""MevcutHayvanSayisi"" || ' / ' || k.""Kapasite"") AS ""Doluluk"",
+    
+    o.""OrtamTuru"" AS ""Ortam"",
+    (o.""Sicaklik"" || ' °C') AS ""Sýcaklýk""
+
+FROM ""Hayvan"" h
+INNER JOIN ""Tur"" t ON h.""TurId"" = t.""TurId""
+INNER JOIN ""Kafes"" k ON h.""KafesId"" = k.""KafesId""
+INNER JOIN ""Ortam"" o ON h.""OrtamId"" = o.""OrtamId""
+ORDER BY h.""HayvanId"" ASC";
+
+
 
                     NpgsqlDataAdapter da = new NpgsqlDataAdapter(sql, baglanti);
                     DataTable dt = new DataTable();
@@ -57,6 +58,16 @@ namespace HayvanatBahcesi
                     {
                         hayvandgv.Columns["HayvanId"].Visible = false;
                     }
+                    if (hayvandgv.Columns["TurId"] != null)
+                        hayvandgv.Columns["TurId"].Visible = false;
+
+                    // 3. Kafes ID Gizle (SQL'e yeni eklemiþtik)
+                    if (hayvandgv.Columns["KafesId"] != null)
+                        hayvandgv.Columns["KafesId"].Visible = false;
+
+                    // 4. Ortam ID Gizle (SQL'e yeni eklemiþtik)
+                    if (hayvandgv.Columns["OrtamId"] != null)
+                        hayvandgv.Columns["OrtamId"].Visible = false;
                 }
                 catch (Exception ex)
                 {
@@ -571,6 +582,189 @@ namespace HayvanatBahcesi
         private void groupBox4_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void hayvan_sil_Click(object sender, EventArgs e)
+        {
+            if (hayvandgv.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Lütfen silinecek satýrý seçiniz.");
+                return;
+            }
+
+            DialogResult hayvancevap = MessageBox.Show("Bu kaydý silmek istediðinize emin misiniz?", "Silme Onayý", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (hayvancevap == DialogResult.Yes)
+            {
+
+                int hayvanSecilenId = int.Parse(hayvandgv.SelectedRows[0].Cells[0].Value.ToString());
+
+                using (NpgsqlConnection baglanti = VeriTabani.BaglantiGetir())
+                {
+                    try
+                    {
+                        baglanti.Open();
+
+                        string sql = @"DELETE FROM ""Hayvan"" WHERE ""HayvanId"" = @id";
+
+                        using (NpgsqlCommand komut = new NpgsqlCommand(sql, baglanti))
+                        {
+                            komut.Parameters.AddWithValue("@id", hayvanSecilenId);
+                            komut.ExecuteNonQuery();
+                        }
+
+                        MessageBox.Show("Kayýt baþarýyla silindi.");
+
+
+                        Listele();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Hata: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+        private void ziyaretci_sil_Click(object sender, EventArgs e)
+        {
+            if (dgvZiyaretciler.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Lütfen silinecek satýrý seçiniz.");
+                return;
+            }
+
+
+            DialogResult ziyaretcicevap = MessageBox.Show("Bu kaydý silmek istediðinize emin misiniz?", "Silme Onayý", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (ziyaretcicevap == DialogResult.Yes)
+            {
+
+                int ziyaretciSecilenId = int.Parse(dgvZiyaretciler.SelectedRows[0].Cells[0].Value.ToString());
+
+                using (NpgsqlConnection baglanti = VeriTabani.BaglantiGetir())
+                {
+                    try
+                    {
+                        baglanti.Open();
+
+                        string sql = @"DELETE FROM ""Ziyaretci"" WHERE ""ZiyaretciId"" = @id";
+
+                        using (NpgsqlCommand komut = new NpgsqlCommand(sql, baglanti))
+                        {
+                            komut.Parameters.AddWithValue("@id", ziyaretciSecilenId);
+                            komut.ExecuteNonQuery();
+                        }
+
+                        MessageBox.Show("Kayýt baþarýyla silindi.");
+
+
+                        Listele();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Hata: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+        private void hayvandgv_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = hayvandgv.Rows[e.RowIndex];
+
+                hayvan_turid.Text = row.Cells["TurId"].Value.ToString();
+                hayvan_kafesid.Text = row.Cells["KafesId"].Value.ToString();
+                hayvan_ortamid.Text = row.Cells["OrtamId"].Value.ToString();
+
+                hayvan_yas.Text = row.Cells["Yaþ"].Value.ToString();
+
+
+                if (row.Cells["Beslenme Saati"].Value != DBNull.Value)
+                {
+                    beslenmesaati.Text = row.Cells["Beslenme Saati"].Value.ToString();
+                }
+                else
+                {
+                    beslenmesaati.Clear();
+                }
+            }
+        }
+
+        private void hayvan_guncelleme_Click(object sender, EventArgs e)
+        {
+            if (hayvandgv.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Lütfen güncellenecek satýrý listeden seçiniz.");
+                return;
+            }
+
+            using (NpgsqlConnection baglanti = VeriTabani.BaglantiGetir())
+            {
+                try
+                {
+                    baglanti.Open();
+
+
+                    string sql = @"UPDATE ""Hayvan"" 
+                           SET ""TurId"" = @tur, 
+                               ""KafesId"" = @kafes, 
+                               ""OrtamId"" = @ortam, 
+                               ""Yas"" = @yas, 
+                               ""BeslenmeSaati"" = @saat
+                           WHERE ""HayvanId"" = @id";
+
+                    using (NpgsqlCommand komut = new NpgsqlCommand(sql, baglanti))
+                    {
+
+                        komut.Parameters.AddWithValue("@tur", int.Parse(hayvan_turid.Text));
+                        komut.Parameters.AddWithValue("@kafes", int.Parse(hayvan_kafesid.Text));
+                        komut.Parameters.AddWithValue("@ortam", int.Parse(hayvan_ortamid.Text));
+                        komut.Parameters.AddWithValue("@yas", int.Parse(hayvan_yas.Text));
+
+
+                        if (beslenmesaati.MaskFull)
+                            komut.Parameters.Add("@saat", NpgsqlTypes.NpgsqlDbType.Time).Value = TimeSpan.Parse(beslenmesaati.Text);
+                        else
+                            komut.Parameters.AddWithValue("@saat", DBNull.Value);
+
+                        int secilenId = int.Parse(hayvandgv.SelectedRows[0].Cells[0].Value.ToString());
+                        komut.Parameters.AddWithValue("@id", secilenId);
+
+                        komut.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Bilgiler baþarýyla güncellendi!");
+                    Listele();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Hata: " + ex.Message);
+                }
+            }
+        }
+
+        private void hayvan_arama_TextChanged(object sender, EventArgs e)
+        {
+            DataTable dt = (DataTable)hayvandgv.DataSource;
+
+            if (dt != null)
+            {
+                
+                string aranan = hayvan_arama.Text;
+
+                try
+                {
+                    
+                    dt.DefaultView.RowFilter = string.Format("[Tür] LIKE '%{0}%' OR [Ortam] LIKE '%{0}%'", aranan);
+                }
+                catch (Exception)
+                {
+                   
+                }
+            }
         }
     }
 }

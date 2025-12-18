@@ -80,9 +80,14 @@
             groupBox2 = new GroupBox();
             analizKafesId = new TextBox();
             groupBox1 = new GroupBox();
+            hayvan_guncelleme = new Button();
+            hayvan_sil = new Button();
             tabPage3 = new TabPage();
             groupBox7 = new GroupBox();
             groupBox6 = new GroupBox();
+            ziyaretci_sil = new Button();
+            label19 = new Label();
+            hayvan_arama = new TextBox();
             ((System.ComponentModel.ISupportInitialize)hayvandgv).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvZiyaretciler).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvDetaylar).BeginInit();
@@ -116,13 +121,14 @@
             hayvandgv.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             hayvandgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             hayvandgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            hayvandgv.Location = new Point(17, 6);
+            hayvandgv.Location = new Point(17, 55);
             hayvandgv.Name = "hayvandgv";
             hayvandgv.RowHeadersVisible = false;
             hayvandgv.RowHeadersWidth = 51;
             hayvandgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             hayvandgv.Size = new Size(1059, 256);
             hayvandgv.TabIndex = 1;
+            hayvandgv.CellClick += hayvandgv_CellClick;
             hayvandgv.CellContentClick += dataGridView1_CellContentClick;
             // 
             // riskAnalizi
@@ -354,7 +360,7 @@
             // 
             ziyaretciEkle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             ziyaretciEkle.BackColor = SystemColors.GradientInactiveCaption;
-            ziyaretciEkle.Location = new Point(310, 84);
+            ziyaretciEkle.Location = new Point(313, 36);
             ziyaretciEkle.Name = "ziyaretciEkle";
             ziyaretciEkle.Size = new Size(125, 53);
             ziyaretciEkle.TabIndex = 28;
@@ -415,7 +421,7 @@
             // hayvan_ekle
             // 
             hayvan_ekle.BackColor = SystemColors.GradientInactiveCaption;
-            hayvan_ekle.Location = new Point(103, 257);
+            hayvan_ekle.Location = new Point(136, 257);
             hayvan_ekle.Name = "hayvan_ekle";
             hayvan_ekle.Size = new Size(145, 29);
             hayvan_ekle.TabIndex = 34;
@@ -575,6 +581,8 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(hayvan_arama);
+            tabPage1.Controls.Add(label19);
             tabPage1.Controls.Add(groupBox3);
             tabPage1.Controls.Add(groupBox2);
             tabPage1.Controls.Add(groupBox1);
@@ -593,7 +601,7 @@
             groupBox3.Controls.Add(EnKalabalikKafes);
             groupBox3.Controls.Add(label7);
             groupBox3.ForeColor = SystemColors.ControlText;
-            groupBox3.Location = new Point(811, 294);
+            groupBox3.Location = new Point(811, 325);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(265, 317);
             groupBox3.TabIndex = 50;
@@ -606,7 +614,7 @@
             groupBox2.Controls.Add(analizKafesId);
             groupBox2.Controls.Add(label18);
             groupBox2.Controls.Add(riskAnalizi);
-            groupBox2.Location = new Point(451, 294);
+            groupBox2.Location = new Point(451, 325);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(354, 317);
             groupBox2.TabIndex = 49;
@@ -623,6 +631,8 @@
             // groupBox1
             // 
             groupBox1.BackColor = Color.DarkGray;
+            groupBox1.Controls.Add(hayvan_guncelleme);
+            groupBox1.Controls.Add(hayvan_sil);
             groupBox1.Controls.Add(hayvan_ekle);
             groupBox1.Controls.Add(hayvan_kafesid);
             groupBox1.Controls.Add(beslenmesaati);
@@ -634,12 +644,34 @@
             groupBox1.Controls.Add(label16);
             groupBox1.Controls.Add(label17);
             groupBox1.Controls.Add(label6);
-            groupBox1.Location = new Point(17, 294);
+            groupBox1.Location = new Point(17, 325);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(428, 317);
             groupBox1.TabIndex = 48;
             groupBox1.TabStop = false;
             groupBox1.Text = "Hayvan Ekleme";
+            // 
+            // hayvan_guncelleme
+            // 
+            hayvan_guncelleme.BackColor = SystemColors.GradientInactiveCaption;
+            hayvan_guncelleme.Location = new Point(299, 257);
+            hayvan_guncelleme.Name = "hayvan_guncelleme";
+            hayvan_guncelleme.Size = new Size(102, 29);
+            hayvan_guncelleme.TabIndex = 47;
+            hayvan_guncelleme.Text = "Güncelleme";
+            hayvan_guncelleme.UseVisualStyleBackColor = false;
+            hayvan_guncelleme.Click += hayvan_guncelleme_Click;
+            // 
+            // hayvan_sil
+            // 
+            hayvan_sil.BackColor = SystemColors.GradientInactiveCaption;
+            hayvan_sil.Location = new Point(17, 257);
+            hayvan_sil.Name = "hayvan_sil";
+            hayvan_sil.Size = new Size(94, 29);
+            hayvan_sil.TabIndex = 46;
+            hayvan_sil.Text = "Hayvan Sil";
+            hayvan_sil.UseVisualStyleBackColor = false;
+            hayvan_sil.Click += hayvan_sil_Click;
             // 
             // tabPage3
             // 
@@ -671,6 +703,7 @@
             // groupBox6
             // 
             groupBox6.BackColor = Color.DarkGray;
+            groupBox6.Controls.Add(ziyaretci_sil);
             groupBox6.Controls.Add(label11);
             groupBox6.Controls.Add(ziyaretciEkle);
             groupBox6.Controls.Add(label10);
@@ -686,6 +719,34 @@
             groupBox6.TabIndex = 29;
             groupBox6.TabStop = false;
             groupBox6.Text = "Ziyaretçi Ekleme";
+            // 
+            // ziyaretci_sil
+            // 
+            ziyaretci_sil.BackColor = SystemColors.GradientInactiveCaption;
+            ziyaretci_sil.Location = new Point(313, 109);
+            ziyaretci_sil.Name = "ziyaretci_sil";
+            ziyaretci_sil.Size = new Size(125, 44);
+            ziyaretci_sil.TabIndex = 29;
+            ziyaretci_sil.Text = "Ziyaretçi Sil";
+            ziyaretci_sil.UseVisualStyleBackColor = false;
+            ziyaretci_sil.Click += ziyaretci_sil_Click;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(28, 17);
+            label19.Name = "label19";
+            label19.Size = new Size(88, 20);
+            label19.TabIndex = 51;
+            label19.Text = "Hayvan Ara:";
+            // 
+            // hayvan_arama
+            // 
+            hayvan_arama.Location = new Point(122, 17);
+            hayvan_arama.Name = "hayvan_arama";
+            hayvan_arama.Size = new Size(125, 27);
+            hayvan_arama.TabIndex = 52;
+            hayvan_arama.TextChanged += hayvan_arama_TextChanged;
             // 
             // Form1
             // 
@@ -709,6 +770,7 @@
             groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)personeldgv).EndInit();
             tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             groupBox2.ResumeLayout(false);
@@ -781,5 +843,10 @@
         private GroupBox groupBox4;
         private GroupBox groupBox7;
         private GroupBox groupBox6;
+        private Button hayvan_sil;
+        private Button ziyaretci_sil;
+        private Button hayvan_guncelleme;
+        private TextBox hayvan_arama;
+        private Label label19;
     }
 }
