@@ -628,45 +628,7 @@ ORDER BY h.""HayvanId"" ASC";
 
         private void ziyaretci_sil_Click(object sender, EventArgs e)
         {
-            if (dgvZiyaretciler.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Lütfen silinecek satýrý seçiniz.");
-                return;
-            }
-
-
-            DialogResult ziyaretcicevap = MessageBox.Show("Bu kaydý silmek istediðinize emin misiniz?", "Silme Onayý", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (ziyaretcicevap == DialogResult.Yes)
-            {
-
-                int ziyaretciSecilenId = int.Parse(dgvZiyaretciler.SelectedRows[0].Cells[0].Value.ToString());
-
-                using (NpgsqlConnection baglanti = VeriTabani.BaglantiGetir())
-                {
-                    try
-                    {
-                        baglanti.Open();
-
-                        string sql = @"DELETE FROM ""Ziyaretci"" WHERE ""ZiyaretciId"" = @id";
-
-                        using (NpgsqlCommand komut = new NpgsqlCommand(sql, baglanti))
-                        {
-                            komut.Parameters.AddWithValue("@id", ziyaretciSecilenId);
-                            komut.ExecuteNonQuery();
-                        }
-
-                        MessageBox.Show("Kayýt baþarýyla silindi.");
-
-
-                        Listele();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Hata: " + ex.Message);
-                    }
-                }
-            }
+           
         }
 
         private void hayvandgv_CellClick(object sender, DataGridViewCellEventArgs e)

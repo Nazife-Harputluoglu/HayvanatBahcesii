@@ -76,6 +76,8 @@
             groupBox4 = new GroupBox();
             personeldgv = new DataGridView();
             tabPage1 = new TabPage();
+            hayvan_arama = new TextBox();
+            label19 = new Label();
             groupBox3 = new GroupBox();
             groupBox2 = new GroupBox();
             analizKafesId = new TextBox();
@@ -85,9 +87,6 @@
             tabPage3 = new TabPage();
             groupBox7 = new GroupBox();
             groupBox6 = new GroupBox();
-            ziyaretci_sil = new Button();
-            label19 = new Label();
-            hayvan_arama = new TextBox();
             ((System.ComponentModel.ISupportInitialize)hayvandgv).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvZiyaretciler).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvDetaylar).BeginInit();
@@ -564,7 +563,7 @@
             groupBox4.Size = new Size(496, 351);
             groupBox4.TabIndex = 34;
             groupBox4.TabStop = false;
-            groupBox4.Text = "Gönüllü Atama";
+            groupBox4.Text = "Bakıcı Atama";
             // 
             // personeldgv
             // 
@@ -594,6 +593,23 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Hayvan Yönetimi";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // hayvan_arama
+            // 
+            hayvan_arama.Location = new Point(122, 17);
+            hayvan_arama.Name = "hayvan_arama";
+            hayvan_arama.Size = new Size(125, 27);
+            hayvan_arama.TabIndex = 52;
+            hayvan_arama.TextChanged += hayvan_arama_TextChanged;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(28, 17);
+            label19.Name = "label19";
+            label19.Size = new Size(88, 20);
+            label19.TabIndex = 51;
+            label19.Text = "Hayvan Ara:";
             // 
             // groupBox3
             // 
@@ -703,7 +719,6 @@
             // groupBox6
             // 
             groupBox6.BackColor = Color.DarkGray;
-            groupBox6.Controls.Add(ziyaretci_sil);
             groupBox6.Controls.Add(label11);
             groupBox6.Controls.Add(ziyaretciEkle);
             groupBox6.Controls.Add(label10);
@@ -719,34 +734,6 @@
             groupBox6.TabIndex = 29;
             groupBox6.TabStop = false;
             groupBox6.Text = "Ziyaretçi Ekleme";
-            // 
-            // ziyaretci_sil
-            // 
-            ziyaretci_sil.BackColor = SystemColors.GradientInactiveCaption;
-            ziyaretci_sil.Location = new Point(313, 109);
-            ziyaretci_sil.Name = "ziyaretci_sil";
-            ziyaretci_sil.Size = new Size(125, 44);
-            ziyaretci_sil.TabIndex = 29;
-            ziyaretci_sil.Text = "Ziyaretçi Sil";
-            ziyaretci_sil.UseVisualStyleBackColor = false;
-            ziyaretci_sil.Click += ziyaretci_sil_Click;
-            // 
-            // label19
-            // 
-            label19.AutoSize = true;
-            label19.Location = new Point(28, 17);
-            label19.Name = "label19";
-            label19.Size = new Size(88, 20);
-            label19.TabIndex = 51;
-            label19.Text = "Hayvan Ara:";
-            // 
-            // hayvan_arama
-            // 
-            hayvan_arama.Location = new Point(122, 17);
-            hayvan_arama.Name = "hayvan_arama";
-            hayvan_arama.Size = new Size(125, 27);
-            hayvan_arama.TabIndex = 52;
-            hayvan_arama.TextChanged += hayvan_arama_TextChanged;
             // 
             // Form1
             // 
@@ -844,7 +831,6 @@
         private GroupBox groupBox7;
         private GroupBox groupBox6;
         private Button hayvan_sil;
-        private Button ziyaretci_sil;
         private Button hayvan_guncelleme;
         private TextBox hayvan_arama;
         private Label label19;
